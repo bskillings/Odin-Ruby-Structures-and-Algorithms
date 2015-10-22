@@ -15,11 +15,8 @@ end
 def build_tree(values, parent = nil)
 #I suspect this part is going to be recursive
 
-	#base case
-	if values.empty?
-		return
-	#no possible children	
-	elsif values.length == 1
+	#no possible children (base case)
+	if values.length == 1
 		current_node = Node.new(values[0])
 		current_node.parent = parent
 		current_node.parent.children.push(current_node)
