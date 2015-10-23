@@ -99,6 +99,7 @@ class Tree
 	def breadth_first_search(target_value)
 		searching_queue = [@ultimate_root]
 		while target_value != searching_queue[0].value
+			puts "comparing #{target_value} to #{searching_queue[0].value}..."
 			going_to_children = searching_queue.shift
 			going_to_children.children.each {|child| searching_queue.push(child)}
 		end
@@ -118,6 +119,7 @@ class Tree
 	def depth_first_search(target_value)
 		searching_stack = [@ultimate_root]
 		while target_value != searching_stack.last.value
+			puts "comparing #{target_value} to #{searching_stack.last.value}..."
 			test_me = searching_stack.pop
 			if test_me.children
 				test_me.children.reverse.each {|child| searching_stack.push(child)}
@@ -134,6 +136,12 @@ class Tree
 			building_path.unshift(put_this_in_path.value)
 		end
 		print "#{building_path}\r\n"
+	end
+
+	def dfs_rec(target_value, node_to_compare = @ultimate_root)
+
+		something something dfs_rec(target_value, some_other_node)
+
 	end
 end
 
