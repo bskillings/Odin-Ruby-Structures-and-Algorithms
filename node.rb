@@ -103,17 +103,7 @@ class Tree
 			going_to_children = searching_queue.shift
 			going_to_children.children.each {|child| searching_queue.push(child)}
 		end
-	
-		#building the path output string (array)
-		print "#{target_value} found! Here is the breadth-first path: \r\n"
-		building_path = []
-		put_this_in_path = searching_queue[0]
-		building_path.unshift(put_this_in_path.value)
-		while put_this_in_path.parent != nil
-			put_this_in_path = put_this_in_path.parent
-			building_path.unshift(put_this_in_path.value)
-		end
-		print "#{building_path}\r\n"
+		target_found_message(target_value, "breadth-first", searching_queue[0])
 	end
 
 	def depth_first_search(target_value)
@@ -126,14 +116,17 @@ class Tree
 			end
 		end
 
-		#building the path output string (array)
-		print "#{target_value} found! Here is the depth-first path: \r\n"
+		target_found_message(target_value, "depth-first", searching_stack.last)
+	end
+
+	#built ouput string
+	def target_found_message(target_value, description, node)
+		print "#{target_value} found! Here is the #{description} path: \r\n"
 		building_path = []
-		put_this_in_path = searching_stack.last
-		building_path.unshift(put_this_in_path.value)
-		while put_this_in_path.parent != nil
-			put_this_in_path = put_this_in_path.parent
-			building_path.unshift(put_this_in_path.value)
+		building_path.unshift(node.value)
+		while node.parent != nil
+			node = node.parent
+			building_path.unshift(node.value)
 		end
 		print "#{building_path}\r\n"
 	end
