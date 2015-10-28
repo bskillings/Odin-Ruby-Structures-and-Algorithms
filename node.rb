@@ -157,21 +157,20 @@ class Tree
 			return true
 		end
 
-		#if dfs_rec on left node is true return true? oh no I forgot
+		#if dfs_rec on left node is true return true
 		if (dfs_rec(target_value, node_to_compare.children[0]))
 			return true
 		end
 
-		#if dfs_rec on right is true return true I think
+		#if dfs_rec on right is true return true
 		if (dfs_rec(target_value, node_to_compare.children[1]))
 			return true
 		end
+
 		#if you get down this far nothing else matters
 		return false
-		#anyway the idea is that you're passing true and false all around, and if it's truy
-		#you add that node to the path that you take to the answer
+		
 	end
-	#comparing part is working, but finding it doesn't trigger anything
 	
 end
 
