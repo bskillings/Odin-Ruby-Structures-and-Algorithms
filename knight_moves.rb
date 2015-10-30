@@ -1,36 +1,8 @@
-#A couple of thoughts before I begin
-
-#how do I create a tree?  Do I create it on the fly? because it could be an infiniate depth
-
-#I could make the children by having an x and y coordinate and a system like
-#child 1 = x+1, Y+2
-#child 2 = x+1, y-2
-#child 3 = x-1, y+2
-# and so on 
-# and then check if either value is below 1 or above 8 and throw it out
-#but then when do I stop?
-
-#I could check to see if a location is already in the parent chain, but that
-# => seems inefficient
-
-#on the other hand, I think it wants me to use breadth first search to prevent
-# => going around in loops, so theoretically the loops exist
-
-#shall I do breadth first and spawn children on the fly?
-#well, it wasn't anywhere on this row, back to the left 
-# => and what are the children of that?
-
-class GameBoard
-	#is this where I make the move tree? 
-	#the only thing I can think of here is to see if moves are legal
-	#but that's easy enough to check
-
-end
-
 class Knight
 
 	def initialize(current_coordinates, goal_coordinates)
 		@current_coordinates = current_coordinates
+		puts "New knight at #{@current_coordinates}, looking for #{goal_coordinates}"
 		tree = MoveTree.new(current_coordinates[0], current_coordinates[1])
 		tree.search_for_move(goal_coordinates)
 	end
@@ -81,7 +53,7 @@ class MoveTree
 				new_child = MoveNode.new(child[0], child[1])
 				new_child.parent = current_node
 				new_child.parent_value_chain = create_value_chain(current_node).reverse
-				puts "creating new child at #{child[0]}, #{child[1]}, parent chain is #{new_child.parent_value_chain}"
+#				puts "creating new child at #{child[0]}, #{child[1]}, parent chain is #{new_child.parent_value_chain}"
 				current_node.children.push(new_child)
 			end
 		end
@@ -110,20 +82,33 @@ class MoveTree
 
 
 	#do a breadth-first search for the goal square
-	#this also isn't working oct 29, 1:00
 	def search_for_move(goal_coordinates)
 		searching_queue = [@root]
-		while goal_coordinates[0] != searching_queue[0].location[0] || goal_coordinates[1] != searching_queue[0].location[0]
-			puts "comparing #{goal_coordinates} to #{searching_queue[0].location}..."
-			going_to_children = searching_queue.shift
-			going_to_children.children.each do |child| 
-				if child != nil
-					searching_queue.push(child)
+		goal_x = goal_coordinates[0]
+		goal_y = goal_coordinates[1]
+		found = false
+		testing_node = @root
+
+		while found == false
+			testing_node = searching_queue.shift
+			testing_x = testing_node.location[0]
+			testing_y = testing_node.location[1]
+
+#			puts "testing x: #{goal_x} to #{testing_x}, testing y; #{goal_y} to #{testing_y}"
+
+			if (goal_x == testing_x) && (goal_y == testing_y)
+				found = true
+			else
+				testing_node.children.each do |test_child|
+					searching_queue.push(test_child)
 				end
 			end
 		end
-		puts "#{goal_coordinates} found! Here is the path:"
-		print searching_queue[0].parent_chain
+
+		puts "#{goal_coordinates} found! Here are the waypoints:"
+		print testing_node.parent_value_chain
+		print ", arrive at #{testing_node.location}\r\n"
+		puts ""
 	end
 end
 
@@ -138,11 +123,7 @@ class MoveNode
 	end
 end
 
-knight = Knight.new([4, 4], [5, 6])
+knight = Knight.new([1, 1], [2, 3])
+knight2 = Knight.new([1, 1], [4, 4])
+knight3 = Knight.new([4, 4], [1, 1])
 
-#two issues right now (oct 30 10:00):
-
-#if I set it to find something in the first row, it doesn't
-
-#also, I'm getting a nil class error if there are no children, rather than just returning.
-#I think this is when the queue is empty or when something nil gets to the front, not sure which
